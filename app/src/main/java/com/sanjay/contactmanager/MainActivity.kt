@@ -52,14 +52,14 @@ class MainActivity : AppCompatActivity() {
 
     // function to check permission in run time
     private fun checkReadContactsPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_CONTACTS
-            ) != PackageManager.PERMISSION_GRANTED
+        val PERMISSIONS =
+            arrayOf<String>(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS)
+        if (ActivityCompat.checkSelfPermission(this, PERMISSIONS.toString())
+            != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 this,
-                Array(1) { Manifest.permission.READ_CONTACTS },
+                PERMISSIONS,
                 REQUEST
             )
         } else {
@@ -106,7 +106,9 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == REQUEST && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            && grantResults[1] == PackageManager.PERMISSION_GRANTED
+        ) {
             readContact()
         }
     }
@@ -210,7 +212,7 @@ class MainActivity : AppCompatActivity() {
                 showAddContactDialog()
             } else {
                 // insert contact
-                insertContactCode(name,phoneNumber)
+                insertContactCode(name, phoneNumber)
                 mAlertDialog.dismiss()
             }
         }
